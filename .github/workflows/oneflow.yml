@@ -1,32 +1,38 @@
-name: test project
-on: [push, workflow_dispatch]
+name: deployment exercise2
+on: push
 jobs:
-   test:
+   lint: 
      runs-on: ubuntu-latest
      steps:
        - name: get code
          uses: actions/checkout@v4
-       - name: setup nodejs
-         uses: actions/setup-node@v3 
-         with: 
-           node-version: 18
-       - name: install nodejs
-         run: npm ci  
-       - name: npm test
-         run: npm test       
+       - name: npm install dependencies
+         run: npm ci
+       - name: lint
+         run: npm run lint
+   test: 
+     runs-on: ubuntu-latest
+     steps:
+       - name: get code
+         uses: actions/checkout@v4
+       - name: install dependencies
+         run: npm ci
+       - name: run the test cases
+         run: npm run test
    deploy:
-      needs: test
-      runs-on: ubuntu-latest
-      steps:
-        - name: get code
-          uses: actions/checkout@v4
-        - name: install nodejs
-          uses: actions/setup-node@v4
-          with:
-            node-version: 18
-        - name: install dependencies
-          run: npm ci
-        - name: build project
-          run: npm run build
-        - name: deploy
-          run: echo "deploying"          
+       runs-on: ubuntu-latest
+       steps:
+         - name: code checkout
+           uses: actions/checkout@v4
+         - name: install the dependencies
+           run:  npm ci
+         - name: build
+           run: npm run build
+         - name: deploy
+           run: echo "deploy"                        
+
+
+
+
+
+
